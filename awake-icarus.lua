@@ -309,15 +309,15 @@ function init()
   params:add{type="control",id="release",controlspec=cs_REL,
     action=function(x) engine.release(x) end}
 
-  cs_CUT = controlspec.new(50,5000,'exp',0,800,'hz')
+  cs_CUT = controlspec.new(50,15000,'exp',0,5000,'hz')
   params:add{type="control",id="cutoff",controlspec=cs_CUT,
     action=function(x) engine.cutoff(x) end}
 
-  cs_GAIN = controlspec.new(0.1,1,'lin',0,0.5,'')
+  cs_GAIN = controlspec.new(0.1,1,'lin',0,0.1,'')
   params:add{type="control",id="gain",controlspec=cs_GAIN,
       action=function(x) engine.gain(x) end}
   
-  cs_FEEDBACK = controlspec.new(0,2,'lin',0,1,'')
+  cs_FEEDBACK = controlspec.new(0,2,'lin',0,0.5,'')
   params:add{type="control",id="feedback",controlspec=cs_FEEDBACK,
     action=function(x) engine.feedback(x) end}
 

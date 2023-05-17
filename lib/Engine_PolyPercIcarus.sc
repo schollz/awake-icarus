@@ -30,7 +30,7 @@ Engine_PolyPercIcarus : CroneEngine {
 			attack=0.015,decay=1,release=2,sustain=0.9,
 			lpf=20000,resonance=0,portamento=0.1,tremelo=0,destruction=0,
 			pwmcenter=0.5,pwmwidth=0.05,pwmfreq=10,detuning=0.1,
-			feedback=0.5,delaytime=0.25, delaytimelag=0.1, sublevel=0;
+			feedback=0.5,delaytime=0.25, delaytimelag=0.1, sublevel=0.2;
 
 			// vars
 			var ender,snd,local,in,ampcheck,hz_dream,hz_sub,subdiv;
@@ -100,7 +100,7 @@ Engine_PolyPercIcarus : CroneEngine {
 
 			LocalOut.ar(local*Lag.kr(feedback,1));
 			
-			snd= Balance2.ar(local[0]*0.2,local[1]*0.2,SinOsc.kr(
+			snd= Balance2.ar(local[0],local[1],SinOsc.kr(
 				LinLin.kr(LFNoise0.kr(0.1),-1,1,0.05,0.2)
 			)*0.1);
 
@@ -109,8 +109,8 @@ Engine_PolyPercIcarus : CroneEngine {
 				Pan2.ar(snd[0],-1+(2*pan),amp),
 				Pan2.ar(snd[1],1+(2*pan),amp),
 			]);
-			SendTrig.kr(Dust.kr(30.0),0,Amplitude.kr(snd[0]+snd[1],3,3));
-			Out.ar(0,snd*4)
+			//SendTrig.kr(Dust.kr(30.0),0,Amplitude.kr(snd[0]+snd[1],3,3));
+			Out.ar(0,snd*2)
 		}).add;	
 
 		context.server.sync;
