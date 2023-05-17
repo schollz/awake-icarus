@@ -30,14 +30,14 @@
 -- *toggle
 -- E2/E3 changes
 
-engine.name = 'PolyPerc'
+engine.name = 'PolyPercIcarus'
 
 hs = include('lib/halfsecond')
 
 MusicUtil = require "musicutil"
 
 options = {}
-options.OUT = {"audio", "midi", "audio + midi", "crow out 1+2", "crow ii JF", "crow ii 301"}
+options.OUT = {"audio", "midi", "audio + midi", "crow out 1+2", "crow ii JF"}
 
 g = grid.connect()
 
@@ -103,8 +103,8 @@ local edit_ch = 1
 local edit_pos = 1
 
 snd_sel = 1
-snd_names = {"cut","gain","pw","rel","fb","rate", "pan", "delay_pan"}
-snd_params = {"cutoff","gain","pw","release", "delay_feedback","delay_rate", "pan", "delay_pan"}
+snd_names = {"cut","feedback","pw","rel","fb","rate", "pan", "delay_pan"}
+snd_params = {"cutoff","feedback","pw","release", "delay_feedback","delay_rate", "pan", "delay_pan"}
 NUM_SND_PARAMS = #snd_params
 
 notes_off_metro = metro.init()
@@ -164,9 +164,6 @@ function step()
             crow.output[2].execute()
           elseif params:get("out") == 5 then
             crow.ii.jf.play_note((note_num-60)/12,5)
-          elseif params:get("out") == 6 then -- er301
-            crow.ii.er301.cv(1, (note_num-60)/12)
-            crow.ii.er301.tr_pulse(1)
           end
 
           -- MIDI out
@@ -261,7 +258,7 @@ function init()
     action = function(value)
       all_notes_off()
       if value == 4 then crow.output[2].action = "{to(5,0),to(0,0.25)}"
-      elseif value == 5 or value == 6 then
+      elseif value == 5 then
         crow.ii.pullup(true)
         crow.ii.jf.mode(1)
       end
@@ -316,10 +313,14 @@ function init()
   params:add{type="control",id="cutoff",controlspec=cs_CUT,
     action=function(x) engine.cutoff(x) end}
 
-  cs_GAIN = controlspec.new(0,4,'lin',0,1,'')
+  cs_GAIN = controlspec.new(0.1,1,'lin',0,0.5,'')
   params:add{type="control",id="gain",controlspec=cs_GAIN,
-    action=function(x) engine.gain(x) end}
+      action=function(x) engine.gain(x) end}
   
+  cs_FEEDBACK = controlspec.new(0,2,'lin',0,1,'')
+  params:add{type="control",id="feedback",controlspec=cs_FEEDBACK,
+    action=function(x) engine.feedback(x) end}
+
   cs_PAN = controlspec.new(-1,1, 'lin',0,0,'')
   params:add{type="control",id="pan",controlspec=cs_PAN,
     action=function(x) engine.pan(x) end}
